@@ -1,0 +1,28 @@
+﻿<div class="container" style="margin-top: 5%">
+    <div class="row">
+        <div class="col-lg-6" style="margin-bottom: 20px; margin-left:20px">
+            <form class="form-inline" #myForm="ngForm">
+                <div class="form-group mx-sm-3 mb-2">
+                    <input name="accountNum" type="text" class="form-control" id="accountNum" [(ngModel)]="accountNum" placeholder="Account Num" #accountNumModel ="ngModel">
+                    <div class="invalid-feedback" *ngIf="accountNumModel.errors && (accountNumModel.touched || !accountNumModel.pristine || accountNumModel.dirty)">
+                        Please input number only
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2" (click) ="SearchPayments()">Search</button>
+            </form>
+        </div>
+        <div class="col-lg-10">
+            <p-dataTable [value]="payments" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
+                <p-column field="accountName" header="Account Name"></p-column>
+                <p-column field="bsb" header="BSB"></p-column>
+                <p-column field="accountNum" header="Account Number"></p-column>
+                <p-column field="amount" header="Amount"></p-column>
+                <p-column field="createdDate" header="Create Date">
+                    <ng-template let-col let-item="rowData" pTemplate="body">
+                        <span>{{item[col.field] | dateFormatBuild : local : type}}</span>
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </div>
+    </div>
+</div>

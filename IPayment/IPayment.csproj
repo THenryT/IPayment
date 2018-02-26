@@ -23,8 +23,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\app\components\searchPayments\searchPayments.component.ts" />
+    <None Remove="ClientApp\app\models\payment.ts" />
+    <None Remove="ClientApp\app\services\paymentService.ts" />
+    <None Remove="ClientApp\app\utilities\pipes\date-format-pipe.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\IPayment.BAL\IPayment.BAL.csproj" />
     <ProjectReference Include="..\IPayment.DAL\IPayment.DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\components\searchPayments\searchPayments.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\payment.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\paymentService.ts" />
+    <TypeScriptCompile Include="ClientApp\app\utilities\pipes\date-format-pipe.ts" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
