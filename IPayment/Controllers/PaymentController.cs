@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using IPayment.DAL.Models;
 using IPayment.BAL.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace IPayment.Controllers
 {
@@ -14,11 +15,14 @@ namespace IPayment.Controllers
     public class PaymentController : Controller
     {
         private readonly IPaymentBAL _paymentBAL;
-
-        public PaymentController(IPaymentBAL paymentBAL)
+        private readonly ILogger<PaymentController> _logger;
+        public PaymentController(IPaymentBAL paymentBAL,ILogger<PaymentController> logger)
         {
             _paymentBAL = paymentBAL;
-        
+            if (null != logger)
+            {
+                _logger = logger;
+            }
         }
 
         [HttpPost]
