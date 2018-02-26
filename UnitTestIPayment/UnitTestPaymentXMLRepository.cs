@@ -1,6 +1,7 @@
 ﻿using IPayment.DAL;
 using IPayment.DAL.Interfaces;
 using IPayment.DAL.Models;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
@@ -13,9 +14,15 @@ namespace UnitTestIPayment
     public class UnitTestPaymentXMLRepository
     {
         private List<PaymentModel> _payments;
+        private const string ROOTNAME = "payments";
+        private const string ELEMENTNAME = "payment";
+        private IOptions<ApplicationSettings> options;
         public UnitTestPaymentXMLRepository()
         {
-           
+            options = Options.Create(new ApplicationSettings()
+            {
+                XMLUrl = "c:\\temp\\paymentList"
+            });
             _payments = new List<PaymentModel>()
                 {
                     new PaymentModel()
@@ -56,8 +63,9 @@ namespace UnitTestIPayment
                 AccountNum = "12344233"
             };
             var mockXMLManager = new Mock<IXMLManager>();
-            mockXMLManager.Setup(i => i.GetObjecs<PaymentModel>("", "")).Returns(_payments);
-            var paymentXMLRepository = new PaymentXMLRepository(mockXMLManager.Object);
+            mockXMLManager.Setup(i => i.AddObject<PaymentModel>(payment, options.Value.XMLUrl, String.Empty, String.Empty));
+
+            var paymentXMLRepository = new PaymentXMLRepository(options,mockXMLManager.Object);
 
             try
             {
@@ -74,12 +82,11 @@ namespace UnitTestIPayment
         public void GetPaymentByAccNumSuccessReturnList()
         {
             var accountNum = "12344233";
-         
-
+            var query = $"{ROOTNAME}/{ELEMENTNAME}";
             var mockXMLManager = new Mock<IXMLManager>();
-            mockXMLManager.Setup(i => i.GetObjecs<PaymentModel>("", "")).Returns(_payments);
+            mockXMLManager.Setup(i => i.GetObjecs<PaymentModel>(options.Value.XMLUrl, query)).Returns(_payments);
 
-            var paymentXMLRepository = new PaymentXMLRepository(mockXMLManager.Object);
+            var paymentXMLRepository = new PaymentXMLRepository(options, mockXMLManager.Object);
             var result = paymentXMLRepository.GetPaymentByAccNum(accountNum);
 
             Assert.AreEqual(2, result.Count);

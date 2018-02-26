@@ -2,6 +2,7 @@
 using IPayment.Controllers;
 using IPayment.DAL.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
@@ -59,7 +60,9 @@ namespace UnitTestIPayment
             var mockPaymentBAL = new Mock<IPaymentBAL>();
             mockPaymentBAL.Setup(x => x.CreatePayment(payment)).Returns(payment);
 
-            var paymentController = new PaymentController(mockPaymentBAL.Object);
+            var mockLog = new Mock<ILogger<PaymentController>>();
+
+            var paymentController = new PaymentController(mockPaymentBAL.Object, mockLog.Object);
             var response = paymentController.Create(payment) as ObjectResult;
 
             Assert.AreEqual(response.StatusCode, 200);
@@ -73,7 +76,8 @@ namespace UnitTestIPayment
             var mockPaymentBAL = new Mock<IPaymentBAL>();
             mockPaymentBAL.Setup(x => x.GetPaymentByAccountNum(selectedAccNum)).Returns(_payments.FindAll(i => i.AccountNum == selectedAccNum));
 
-            var paymentController = new PaymentController(mockPaymentBAL.Object);
+            var mockLog = new Mock<ILogger<PaymentController>>();
+            var paymentController = new PaymentController(mockPaymentBAL.Object, mockLog.Object);
             var response = paymentController.GetByAccountNum(selectedAccNum) as ObjectResult;
 
             Assert.AreEqual(200, response.StatusCode);

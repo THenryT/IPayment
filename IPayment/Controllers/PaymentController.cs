@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using IPayment.DAL.Models;
 using IPayment.BAL.Interfaces;
 using Microsoft.Extensions.Logging;
+using IPayment.Attributes;
 
 namespace IPayment.Controllers
 {
     [Produces("application/json")]
     [Route("api/Payment")]
+    [ValidateModel]
     public class PaymentController : Controller
     {
         private readonly IPaymentBAL _paymentBAL;
@@ -28,13 +30,17 @@ namespace IPayment.Controllers
         [HttpPost]
         public IActionResult Create([FromBody]PaymentModel paymentRequest)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"create payment: {paymentRequest}");
+            var result = _paymentBAL.CreatePayment(paymentRequest);
+            return new OkObjectResult(result);
         }
 
         [HttpGet]
         public IActionResult GetByAccountNum(string accountNum)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"get payments by accountNum: {accountNum}");
+            var result = _paymentBAL.GetPaymentByAccountNum(accountNum);
+            return new OkObjectResult(result);
         }
     }
 }

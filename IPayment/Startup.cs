@@ -15,6 +15,7 @@ using IPayment.BAL.Interfaces;
 using IPayment.DAL.Models;
 using NLog.Web;
 using NLog.Extensions.Logging;
+using IPayment.DAL.Utility;
 
 namespace IPayment
 {
@@ -36,6 +37,7 @@ namespace IPayment
             services.AddTransient<BAL.Interfaces.IPaymentBAL, PaymentBAL>();
             services.AddTransient<IPaymentBAL, PaymentBAL>();
             services.AddTransient<IPaymentRepository, PaymentXMLRepository>();
+            services.AddTransient<IXMLManager, XMLManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

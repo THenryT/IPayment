@@ -17,12 +17,15 @@ namespace IPayment.BAL
 
         public PaymentModel CreatePayment(PaymentModel payment)
         {
-            throw new NotImplementedException();
+            payment.CreatedDate = DateTime.Now;
+            _paymentRep.SavePayment(payment);
+            return payment;
         }
 
         public List<PaymentModel> GetPaymentByAccountNum(string AccountNum)
         {
-            throw new NotImplementedException();
+            var result = _paymentRep.GetPaymentByAccNum(AccountNum);
+            return result;
         }
     }
 }

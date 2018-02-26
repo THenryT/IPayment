@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace IPayment.DAL.Models
 {
@@ -27,8 +30,46 @@ namespace IPayment.DAL.Models
         [Required]
         public double Amount { get; set; }
 
-        public DateTime? CreatedDate { get; set; }
+        [XmlIgnore]
+        public DateTime? CreatedDate
+        {
+            get { return _createdDate; }
+            set { _createdDate = value; }
+        }
 
-        public DateTime? ProcessedDate { get; set; }
+        [XmlIgnore]
+        public DateTime? ProcessedDate
+        {
+            get { return _processedDate; }
+            set { _processedDate = value; }
+        }
+
+        [JsonIgnore]
+        public string CreatedDateString
+        {
+            get
+            {
+                return _createdDate.HasValue ? XmlConvert.ToString(_createdDate.Value, XmlDateTimeSerializationMode.Unspecified)
+                : string.Empty;
+            }
+            set
+            {
+                _createdDate = !string.IsNullOrEmpty(value) ? XmlConvert.ToDateTime(value, XmlDateTimeSerializationMode.Unspecified) : (DateTime?)null;
+            }
+        }
+
+        [JsonIgnore]
+        public string ProcessedDateString
+        {
+            get
+            {
+                return _processedDate.HasValue ? XmlConvert.ToString(_processedDate.Value, XmlDateTimeSerializationMode.Unspecified)
+                : string.Empty;
+            }
+            set
+            {
+                _processedDate = !string.IsNullOrEmpty(value) ? XmlConvert.ToDateTime(value, XmlDateTimeSerializationMode.Unspecified) : (DateTime?)null;
+            }
+        }
     }
 }
